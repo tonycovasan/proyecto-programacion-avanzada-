@@ -1,0 +1,106 @@
+@startuml
+
+package "code" {
+
+    package "controles" {
+        class KeyInput extends KeyAdapter {
+            - gamePanel : GamePanel
+            - snake : Snake
+
+            + KeyInput(gamePanel : GamePanel, snake : Snake)
+            + keyPressed(e : KeyEvent) : void
+        }
+    }
+
+    package "Directions" {
+        enum Directions {
+            up
+            down
+            left
+            right
+        }
+    }
+
+    package "gameComponents" {
+        class Apple {
+            - y : int
+            - x : int
+            - rand : Random
+
+            + generateApple() : void
+            + getX() : int
+            + getY() : int
+        }
+
+        class Snake {
+            - length : int
+            - x : int[]
+            - y : int[]
+            - score : int
+            - highScore : int
+            - direction : Directions
+        }
+
+        Snake *-- Directions
+        Snake -- Apple
+        Snake -- KeyInput
+        Snake -- SfxPlayer
+
+    }
+
+    package "screens" {
+        class GameOverScreen {
+            - gamePanel : GamePanel
+            - score : int
+            - highScore : int
+            - newHighScore : boolean
+            - highScore : int
+
+            + GameOverScreen(gamePanel : GamePanel, snake : Snake)
+            + draw(g : Graphics) : void
+        }
+    }
+
+    class Window extends JFrame {
+        + Window()
+    }
+
+    class Game {
+        + sfxPlayer : SfxPlayer
+        + main() : void
+    }
+
+        class GamePanel extends JPanel implements ActionListener {
+             +  WIDTH : int
+             + HEIGHT : int
+             +  UNIT_SIZE : int
+             +  GAME_UNITS : int
+             +  DELAY : int
+             + gameStart : boolean
+             + gameOver : boolea
+             - snake : Snake
+             - apple : Apple
+             - timer : Timer
+
+             + GamePanel()
+             + paintComponent(g : Graphics) : void
+             + draw(g : Graphics) : void
+             + actionPerformed(e : ActionEvent) : void
+             - init() : void
+             + reset() : void
+             + startGame() : void
+             + checkApple() : void
+             + drawGameMatrix(g : Graphics) : void
+        }
+
+    GameOverScreen *-- Snake
+    GameOverScreen --* GamePanel
+
+    GamePanel *-- Snake
+    GamePanel *-- Apple
+
+    Window --* Game
+
+}
+
+@enduml
